@@ -1,46 +1,52 @@
 package ru.lissenok88.restaurant.voting.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-public class Voting {
-    private Integer vote;
-    private Integer user_id;
-    private Integer restaurant_id;
+@Entity
+@Table
+public class Voting extends AbstractBaseEntity {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "restaurantId", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Restaurant restaurant;
+
+    @Column(name = "dateTime", nullable = false)
+    @NotNull
     private LocalDateTime dateTime;
 
     public Voting() {
 
     }
 
-    public Voting(Integer vote, Integer user_id, Integer restaurant_id, LocalDateTime dateTime) {
-        this.vote = vote;
-        this.user_id = user_id;
-        this.restaurant_id = restaurant_id;
+    public Voting(Integer id, LocalDateTime dateTime) {
+        super(id);
         this.dateTime = dateTime;
     }
 
-    public Integer getVote() {
-        return vote;
+    public User getUser() {
+        return user;
     }
 
-    public void setVote(Integer vote) {
-        this.vote = vote;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public Integer getUser_id() {
-        return user_id;
+    public Restaurant getRestaurant() {
+        return restaurant;
     }
 
-    public void setUser_id(Integer user_id) {
-        this.user_id = user_id;
-    }
-
-    public Integer getRestaurant_id() {
-        return restaurant_id;
-    }
-
-    public void setRestaurant_id(Integer restaurant_id) {
-        this.restaurant_id = restaurant_id;
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 
     public LocalDateTime getDateTime() {
@@ -49,5 +55,15 @@ public class Voting {
 
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Voting{" +
+                "id=" + id +
+                ", user=" + user +
+                ", restaurant=" + restaurant +
+                ", date=" + dateTime +
+                '}';
     }
 }

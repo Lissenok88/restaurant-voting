@@ -1,28 +1,24 @@
 package ru.lissenok88.restaurant.voting.model;
 
-import java.util.Date;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
+@Table(name = "restaurant")
 public class Restaurant extends AbstractNamedEntity{
-    private Date date;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Menu> menu;
 
     public Restaurant() {
 
     }
 
-    public Restaurant(Integer id, String name, Date date, List<Menu> menu) {
+    public Restaurant(Integer id, String name) {
         super(id, name);
-        this.date = date;
-        this.menu = menu;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public Date getDate() {
-        return date;
     }
 
     public void setMenu(List<Menu> menu) {
@@ -31,5 +27,13 @@ public class Restaurant extends AbstractNamedEntity{
 
     public List<Menu> getMenu() {
         return menu;
+    }
+
+    @Override
+    public String toString() {
+        return "Restaurant{" +
+                "id=" + id +
+                ", name=" + name +
+                '}';
     }
 }

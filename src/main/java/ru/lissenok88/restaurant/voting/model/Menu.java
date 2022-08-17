@@ -1,5 +1,6 @@
 package ru.lissenok88.restaurant.voting.model;
 
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Range;
@@ -9,46 +10,35 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "menu")
-public class Menu extends AbstractNamedEntity{
+@Table(name = "menu", uniqueConstraints = {@UniqueConstraint(
+        columnNames = {"name", "restaurant_id", "local_date"}, name = "menu_unique_name_local_date_idx")})
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(callSuper = true)
+public class Menu extends NamedEntity {
     @Column(name = "price", nullable = false)
     @Range(min = 10, max = 5000)
     private Integer price;
 
-    @Column(name = "date", nullable = false, columnDefinition = "timestamp default now()", updatable = false)
+    @Column(name = "local_date", nullable = false, columnDefinition = "timestamp default now()", updatable = false)
     @NotNull
-    private LocalDate date = LocalDate.now();
+    private LocalDate localDate = LocalDate.now();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @ToString.Exclude
     private Restaurant restaurant;
 
-    public Menu(){
-
+    public Menu(String name, Integer price, Restaurant restaurant, LocalDate localDate) {
+        this(null, name, price, restaurant, localDate);
     }
 
-    public Menu(Integer id, String dish, Integer price) {
-        super(id, dish);
+    public Menu(Integer id, String name, Integer price, Restaurant restaurant, LocalDate localDate) {
+        super(id, name);
         this.price = price;
-    }
-
-    public Integer getPrice() {
-        return price;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
-    @Override
-    public String toString() {
-        return "Menu{" +
-                "id=" + id +
-                ", name=" + name +
-                ", price=" + price +
-                ", restaurant" + restaurant +
-                ", date=" + date +
-                '}';
+        this.restaurant = restaurant;
+        this.localDate = localDate;
     }
 }

@@ -16,7 +16,8 @@ import java.util.List;
 @RequestMapping(value = RestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 public class RestaurantController {
-    static final String REST_URL = "/rest/profile/restaurants";
+
+    static final String REST_URL = "/api/profile/restaurants";
 
     private final RestaurantRepository restaurantRepository;
 
@@ -28,9 +29,9 @@ public class RestaurantController {
         this.voteRepository = voteRepository;
     }
 
-    @GetMapping
+    @GetMapping(value = "/with-menus")
     public List<RestaurantTo> getAllWithMenuToday() {
         log.info("get all restaurants with menu today");
-        return RestaurantUtil.getTos(restaurantRepository.getAllWithMenuByDate(LocalDate.now()), voteRepository.findAll());
+        return RestaurantUtil.getTos(restaurantRepository.getAllWithMenusByDate(LocalDate.now()), voteRepository.findAll());
     }
 }

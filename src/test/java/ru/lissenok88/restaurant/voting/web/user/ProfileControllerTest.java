@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static ru.lissenok88.restaurant.voting.web.user.ProfileController.REST_URL;
 import static ru.lissenok88.restaurant.voting.web.user.UserTestData.*;
 
-public class ProfileControllerTest extends AbstractControllerTest{
+class ProfileControllerTest extends AbstractControllerTest {
     @Autowired
     private UserRepository userRepository;
 

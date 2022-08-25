@@ -1,36 +1,21 @@
 package ru.lissenok88.restaurant.voting.to;
 
+import lombok.EqualsAndHashCode;
+import lombok.Value;
 import ru.lissenok88.restaurant.voting.model.Menu;
 
 import java.util.List;
 
-public class RestaurantTo {
-    private final Integer id;
-    private final String name;
-    private final List<Menu> menu;
-    private final int voteCount;
+@Value
+@EqualsAndHashCode(callSuper = true)
+public class RestaurantTo extends NamedTo{
+    List<Menu> menus;
+    int voteCount;
 
-    public RestaurantTo(Integer id, String name, List<Menu> menu, int voteCount) {
-        this.id = id;
-        this.name = name;
-        this.menu = menu;
+    public RestaurantTo(Integer id, String name, List<Menu> menus, int voteCount) {
+        super(id, name);
+        this.menus = menus;
         this.voteCount = voteCount;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public List<Menu> getMenu() {
-        return menu;
-    }
-
-    public int getVoteCount() {
-        return voteCount;
     }
 
     @Override
@@ -38,7 +23,7 @@ public class RestaurantTo {
         return "RestaurantTo{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", menu=" + menu +
+                ", menus=" + menus +
                 ", voteCount=" + voteCount +
                 '}';
     }

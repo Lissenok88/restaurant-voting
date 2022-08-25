@@ -25,7 +25,7 @@ import static ru.lissenok88.restaurant.voting.util.validation.ValidationUtil.che
 @Slf4j
 @CacheConfig(cacheNames = "users")
 public class AdminUserController extends AbstractUserController {
-    static final String REST_URL = "/rest/admin/users";
+    static final String REST_URL = "/api/admin/users";
 
     @Override
     @GetMapping("/{id}")

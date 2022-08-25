@@ -1,5 +1,6 @@
 package ru.lissenok88.restaurant.voting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -18,7 +19,8 @@ public class Restaurant extends NamedEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @ToString.Exclude
-    private List<Menu> menu;
+    @JsonIgnore
+    private List<Menu> menus;
 
     public Restaurant(Integer id, String name) {
         super(id, name);

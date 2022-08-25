@@ -14,7 +14,7 @@ public class RestaurantUtil {
     }
 
     private static RestaurantTo createTo(Restaurant restaurant, List<Vote> votes) {
-        return new RestaurantTo(restaurant.id(), restaurant.getName(), restaurant.getMenu(),
+        return new RestaurantTo(restaurant.id(), restaurant.getName(), restaurant.getMenus(),
                 (int) votes.stream().filter(vote -> vote.getRestaurant().getId() == restaurant.getId()).count());
     }
 }

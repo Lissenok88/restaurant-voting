@@ -23,7 +23,7 @@ import static ru.lissenok88.restaurant.voting.web.restaurant.RestaurantTestData.
 import static ru.lissenok88.restaurant.voting.web.user.UserTestData.ADMIN_MAIL;
 
 class AdminMenuControllerTest extends AbstractControllerTest {
-    private static final String REST_URL = AdminRestaurantController.REST_URL + "/{restaurantId}/menus/";
+    private static final String REST_URL = AdminMenuController.REST_URL + "/";
 
     @Autowired
     MenuRepository menuRepository;

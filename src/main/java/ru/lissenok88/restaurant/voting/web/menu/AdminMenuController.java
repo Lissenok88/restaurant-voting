@@ -11,20 +11,20 @@ import ru.lissenok88.restaurant.voting.model.Menu;
 import ru.lissenok88.restaurant.voting.repository.MenuRepository;
 import ru.lissenok88.restaurant.voting.repository.RestaurantRepository;
 import ru.lissenok88.restaurant.voting.util.validation.ValidationUtil;
+import ru.lissenok88.restaurant.voting.web.restaurant.AdminRestaurantController;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
 import static ru.lissenok88.restaurant.voting.util.validation.ValidationUtil.checkNew;
-import static ru.lissenok88.restaurant.voting.web.restaurant.AdminRestaurantController.REST_URL;
 
 @RestController
-@RequestMapping(value = AdminMenuController.REST_URL_MENU, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = AdminMenuController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
 @Slf4j
 public class AdminMenuController {
-    static final String REST_URL_MENU = REST_URL + "/{restaurantId}/menus";
+    static final String REST_URL = AdminRestaurantController.REST_URL + "/{restaurantId}/menus";
 
     private final MenuRepository menuRepository;
 
@@ -51,7 +51,7 @@ public class AdminMenuController {
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
-                .buildAndExpand(created.getId()).toUri();
+                .buildAndExpand(restaurantId, created.getId()).toUri();
 
         return ResponseEntity.created(uriOfNewResource).body(created);
     }

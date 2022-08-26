@@ -22,7 +22,7 @@ import static ru.lissenok88.restaurant.voting.util.validation.ValidationUtil.che
 @Slf4j
 public class AdminRestaurantController {
 
-    static final String REST_URL = "/api/admin/restaurants";
+    public static final String REST_URL = "/api/admin/restaurants";
 
     private final RestaurantRepository restaurantRepository;
 

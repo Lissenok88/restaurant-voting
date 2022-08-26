@@ -30,10 +30,6 @@ public class Menu extends NamedEntity {
     @JsonIgnore
     private Restaurant restaurant;
 
-    public Menu(String name, Integer price, Restaurant restaurant, LocalDate localDate) {
-        this(null, name, price, restaurant, localDate);
-    }
-
     public Menu(Integer id, String name, Integer price, Restaurant restaurant, LocalDate localDate) {
         super(id, name);
         this.price = price;

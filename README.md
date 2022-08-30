@@ -10,3 +10,17 @@
   - If it is after 11:00 then it is too late, vote can't be changed
 
 Each restaurant provides a new menu each day.
+
+-----------------------------------------------------
+
+- Stack: [JDK 17](http://jdk.java.net/17/), Spring Boot 2.5, Lombok, H2, Caffeine Cache, Swagger/OpenAPI 3.0
+
+-----------------------------------------------------
+
+### [REST API documentation](http://localhost:8080/swagger-ui.html)  
+#### Credentials:
+```
+Admin: admin@gmail.com / admin
+User:  user@yandex.ru / password
+Bob:   bob@mail.ru / bob
+```

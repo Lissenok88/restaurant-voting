@@ -12,6 +12,7 @@ import java.util.List;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.lissenok88.restaurant.voting.web.menu.MenuTestData.*;
 import static ru.lissenok88.restaurant.voting.web.restaurant.RestaurantController.REST_URL;
 import static ru.lissenok88.restaurant.voting.web.restaurant.RestaurantTestData.*;
 import static ru.lissenok88.restaurant.voting.web.user.UserTestData.*;
@@ -23,6 +24,9 @@ class RestaurantControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void getAllWithMenuToday() throws Exception {
+        restaurant_1.setMenus(menu1);
+        restaurant_2.setMenus(menu2);
+        restaurant_3.setMenus(menu3);
         perform(MockMvcRequestBuilders.get(REST_URL + "/with-menus"))
                 .andExpect(status().isOk())
                 .andDo(print())

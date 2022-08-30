@@ -13,7 +13,6 @@ import ru.lissenok88.restaurant.voting.model.User;
 import ru.lissenok88.restaurant.voting.model.Vote;
 import ru.lissenok88.restaurant.voting.repository.RestaurantRepository;
 import ru.lissenok88.restaurant.voting.repository.VoteRepository;
-import ru.lissenok88.restaurant.voting.util.exception.NotFoundException;
 import ru.lissenok88.restaurant.voting.web.AuthUser;
 
 import java.net.URI;

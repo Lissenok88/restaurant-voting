@@ -1,11 +1,13 @@
 INSERT INTO USERS (name, email, password)
 VALUES ('User', 'user@yandex.ru', '{noop}password'),
-       ('Admin', 'admin@gmail.com', '{noop}admin');
+       ('Admin', 'admin@gmail.com', '{noop}admin'),
+       ('Bob', 'bob@mail.ru', '{noop}bob');
 
 INSERT INTO USER_ROLES (role, user_id)
 VALUES ('USER', 1),
        ('ADMIN', 2),
-       ('USER', 2);
+       ('USER', 2),
+       ('USER', 3);
 
 INSERT INTO RESTAURANTS(name)
 VALUES ('Paris-Way'),
@@ -25,6 +27,6 @@ VALUES ('Салат Цезарь', '75', 1, CURRENT_DATE),
        ('Котлета', '50', 3, CURRENT_DATE),
        ('Чай', '30', 3, CURRENT_DATE);
 
-INSERT INTO VOTE(restaurant_id, user_id, date_time)
+INSERT INTO VOTES(restaurant_id, user_id, date_time)
 VALUES (1, 1, CURRENT_DATE),
        (3, 2, CURRENT_DATE);

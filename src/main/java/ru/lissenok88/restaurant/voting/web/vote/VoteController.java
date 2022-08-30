@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.lissenok88.restaurant.voting.error.IllegalRequestDataException;
 import ru.lissenok88.restaurant.voting.model.User;
 import ru.lissenok88.restaurant.voting.model.Vote;
 import ru.lissenok88.restaurant.voting.repository.RestaurantRepository;
@@ -57,7 +58,7 @@ public class VoteController {
         if (localDateTime.toLocalTime().compareTo(TIME_LIMIT) < 0) {
             voteRepository.save(new Vote(vote.id(), restaurantRepository.getById(restaurantId), user, localDateTime.toLocalDate()));
         } else {
-            throw new NotFoundException("You cannot vote again today");
+            throw new IllegalRequestDataException("You cannot vote again today");
         }
     }
 }

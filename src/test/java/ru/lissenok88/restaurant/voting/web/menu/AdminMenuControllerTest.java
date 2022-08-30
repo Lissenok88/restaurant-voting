@@ -12,7 +12,6 @@ import ru.lissenok88.restaurant.voting.model.Menu;
 import ru.lissenok88.restaurant.voting.repository.MenuRepository;
 import ru.lissenok88.restaurant.voting.util.JsonUtil;
 import ru.lissenok88.restaurant.voting.web.AbstractControllerTest;
-import ru.lissenok88.restaurant.voting.web.restaurant.AdminRestaurantController;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

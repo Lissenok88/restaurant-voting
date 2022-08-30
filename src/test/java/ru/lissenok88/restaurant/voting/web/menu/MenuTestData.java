@@ -25,7 +25,7 @@ public class MenuTestData {
     public static final Menu menu2_1 = new Menu(MENU2_ID, "Паста с грибами", 125, restaurant_2, CURRENT_DATE);
     public static final Menu menu2_2 = new Menu(MENU2_ID + 1, "Капучино", 150, restaurant_2, CURRENT_DATE);
     public static final Menu menu3_1 = new Menu(MENU3_ID, "Салат Министерский", 75, restaurant_3, CURRENT_DATE);
-    public static final Menu menu3_2 = new Menu(MENU2_ID + 1, "Солянка", 150, restaurant_3, CURRENT_DATE);
+    public static final Menu menu3_2 = new Menu(MENU3_ID + 1, "Солянка", 150, restaurant_3, CURRENT_DATE);
     public static final Menu menu3_3 = new Menu(MENU3_ID + 2, "Картофельное пюре", 100, restaurant_3, CURRENT_DATE);
     public static final Menu menu3_4 = new Menu(MENU3_ID + 3, "Котлета", 50, restaurant_3, CURRENT_DATE);
     public static final Menu menu3_5 = new Menu(MENU3_ID + 4, "Чай", 30, restaurant_3, CURRENT_DATE);

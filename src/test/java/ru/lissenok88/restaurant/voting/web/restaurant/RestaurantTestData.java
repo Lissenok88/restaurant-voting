@@ -7,8 +7,8 @@ import ru.lissenok88.restaurant.voting.web.MatcherFactory;
 import static ru.lissenok88.restaurant.voting.web.menu.MenuTestData.*;
 
 public class RestaurantTestData {
-    public static final MatcherFactory.Matcher<Restaurant> RESTAURANT_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Restaurant.class, "menu");
-    public static MatcherFactory.Matcher<RestaurantTo> RESTAURANT_WITH_MENUS_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(RestaurantTo.class, "menu.restaurants");
+    public static final MatcherFactory.Matcher<Restaurant> RESTAURANT_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Restaurant.class, "menus");
+    public static final MatcherFactory.Matcher<RestaurantTo> RESTAURANT_WITH_MENUS_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(RestaurantTo.class, "menus.restaurant");
 
     public static final int RESTAURANT_1 = 1;
     public static final int RESTAURANT_2 = 2;

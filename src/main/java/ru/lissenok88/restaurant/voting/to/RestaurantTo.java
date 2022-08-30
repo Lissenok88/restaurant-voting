@@ -1,7 +1,6 @@
 package ru.lissenok88.restaurant.voting.to;
 
-import lombok.EqualsAndHashCode;
-import lombok.Value;
+import lombok.*;
 import ru.lissenok88.restaurant.voting.model.Menu;
 
 import java.util.List;

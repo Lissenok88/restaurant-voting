@@ -1,20 +1,22 @@
 package ru.lissenok88.restaurant.voting.util;
 
+import lombok.experimental.UtilityClass;
 import ru.lissenok88.restaurant.voting.model.Restaurant;
 import ru.lissenok88.restaurant.voting.model.Vote;
 import ru.lissenok88.restaurant.voting.to.RestaurantTo;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
+@UtilityClass
 public class RestaurantUtil {
     public static List<RestaurantTo> getTos(Collection<Restaurant> restaurants, List<Vote> votes) {
-        return restaurants.stream().map(restaurant -> createTo(restaurant, votes)).collect(Collectors.toList());
+        return restaurants.stream().map(restaurant -> createTo(restaurant, votes)).toList();
     }
 
     private static RestaurantTo createTo(Restaurant restaurant, List<Vote> votes) {
         return new RestaurantTo(restaurant.id(), restaurant.getName(), restaurant.getMenus(),
-                (int) votes.stream().filter(vote -> vote.getRestaurant().getId() == restaurant.getId()).count());
+                (int) votes.stream().filter(vote -> Objects.equals(vote.getRestaurant().getId(), restaurant.getId())).count());
     }
 }

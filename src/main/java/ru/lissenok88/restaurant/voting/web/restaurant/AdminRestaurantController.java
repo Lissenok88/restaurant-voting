@@ -2,6 +2,9 @@ package ru.lissenok88.restaurant.voting.web.restaurant;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +23,7 @@ import static ru.lissenok88.restaurant.voting.util.validation.ValidationUtil.che
 @RestController
 @RequestMapping(value = AdminRestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
+@CacheConfig(cacheNames = "restaurants")
 public class AdminRestaurantController {
 
     public static final String REST_URL = "/api/admin/restaurants";
@@ -32,12 +36,14 @@ public class AdminRestaurantController {
     }
 
     @GetMapping
+    @Cacheable
     public List<Restaurant> getAll() {
         log.info("getAll restaurants");
         return restaurantRepository.findAll();
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @CacheEvict(allEntries = true)
     public ResponseEntity<Restaurant> createWithLocation(@Valid @RequestBody Restaurant restaurant) {
         log.info("create restaurant {}", restaurant);
         checkNew(restaurant);
@@ -52,6 +58,7 @@ public class AdminRestaurantController {
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CacheEvict(allEntries = true)
     public void update(@Valid @RequestBody Restaurant restaurant, @PathVariable int id) {
         log.info("update restaurant {} with id={}", restaurant, id);
         assureIdConsistent(restaurant, id);

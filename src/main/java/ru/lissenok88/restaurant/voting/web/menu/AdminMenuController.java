@@ -2,6 +2,8 @@ package ru.lissenok88.restaurant.voting.web.menu;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.MediaType;
@@ -23,6 +25,7 @@ import static ru.lissenok88.restaurant.voting.util.validation.ValidationUtil.che
 @RequestMapping(value = AdminMenuController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
 @Slf4j
+@CacheConfig(cacheNames = "restaurantsWithMenus")
 public class AdminMenuController {
     static final String REST_URL = AdminRestaurantController.REST_URL + "/{restaurantId}/menus";
 
@@ -43,6 +46,7 @@ public class AdminMenuController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @CacheEvict(allEntries = true)
     public ResponseEntity<Menu> createWithLocation(@Valid @RequestBody Menu menu, @PathVariable int restaurantId) {
         log.info("create menu {} for restaurant {}", menu, restaurantId);
         checkNew(menu);
@@ -58,6 +62,7 @@ public class AdminMenuController {
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CacheEvict(allEntries = true)
     public void update(@Valid @RequestBody Menu menu, @PathVariable int restaurantId, @PathVariable int id) {
         log.info("update menu {} for restaurant {} ", menu, restaurantId);
         ValidationUtil.assureIdConsistent(menu, id);

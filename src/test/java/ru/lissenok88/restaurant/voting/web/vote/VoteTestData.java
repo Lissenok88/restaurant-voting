@@ -10,13 +10,13 @@ import static ru.lissenok88.restaurant.voting.web.restaurant.RestaurantTestData.
 import static ru.lissenok88.restaurant.voting.web.user.UserTestData.*;
 
 public class VoteTestData {
-    public static final MatcherFactory.Matcher<Vote> VOTE_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Vote.class, "restaurant", "users");
+    public static final MatcherFactory.Matcher<Vote> VOTE_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Vote.class, "restaurant", "user");
 
-    public static final Vote vote1 = new Vote(restaurant_1, user, CURRENT_DATE);
-    public static final Vote vote3 = new Vote(restaurant_3, admin, CURRENT_DATE);
+    public static final Vote vote1 = new Vote(1, restaurant_1, user, CURRENT_DATE);
+    public static final Vote vote3 = new Vote(2, restaurant_3, admin, CURRENT_DATE);
 
     public static Vote getNew() {
-        return new Vote(null, restaurant_1, user, LocalDate.now());
+        return new Vote(null, restaurant_2, bob, LocalDate.now());
     }
 
     public static Vote getUpdated() {

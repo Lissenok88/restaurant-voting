@@ -51,7 +51,9 @@ public class VoteController {
     public void update(@RequestParam int restaurantId, @AuthenticationPrincipal AuthUser authUser) {
         LocalDateTime localDateTime = LocalDateTime.now();
         User user = authUser.getUser();
-        Vote vote = voteRepository.getByUserByDate(localDateTime.toLocalDate(), user);
+        Vote vote = voteRepository.getByUserByDate(localDateTime.toLocalDate(), user).orElseThrow(
+                () -> new IllegalRequestDataException("You haven't voted today")
+        );
 
         log.info("update vote {}", vote);
         if (localDateTime.toLocalTime().compareTo(TIME_LIMIT) < 0) {

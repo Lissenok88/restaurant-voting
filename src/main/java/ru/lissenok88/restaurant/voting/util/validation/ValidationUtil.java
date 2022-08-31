@@ -52,19 +52,6 @@ public class ValidationUtil {
             throw new IllegalRequestDataException(bean.getClass().getSimpleName() + " must be new (id=null)");
         }
     }
-  /*  public static void checkNew(BaseEntity entity) {
-        if (!entity.isNew()) {
-            throw new IllegalArgumentException(entity + " must be new (id=null)");
-        }
-    }
-*/
-   /* public static void assureIdConsistent(BaseEntity entity, int id) {
-        if (entity.isNew()) {
-            entity.setId(id);
-        } else if (entity.id() != id) {
-            throw new IllegalArgumentException(entity + " must be with id=" + id);
-        }
-    }*/
 
     public static void assureIdConsistent(HasId bean, int id) {
         if (bean.isNew()) {

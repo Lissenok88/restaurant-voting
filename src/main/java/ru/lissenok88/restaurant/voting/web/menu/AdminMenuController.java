@@ -7,6 +7,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.MediaType;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.lissenok88.restaurant.voting.model.Menu;
@@ -47,6 +48,7 @@ public class AdminMenuController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @CacheEvict(allEntries = true)
+    @Transactional
     public ResponseEntity<Menu> createWithLocation(@Valid @RequestBody Menu menu, @PathVariable int restaurantId) {
         log.info("create menu {} for restaurant {}", menu, restaurantId);
         checkNew(menu);
@@ -63,6 +65,7 @@ public class AdminMenuController {
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CacheEvict(allEntries = true)
+    @Transactional
     public void update(@Valid @RequestBody Menu menu, @PathVariable int restaurantId, @PathVariable int id) {
         log.info("update menu {} for restaurant {} ", menu, restaurantId);
         ValidationUtil.assureIdConsistent(menu, id);

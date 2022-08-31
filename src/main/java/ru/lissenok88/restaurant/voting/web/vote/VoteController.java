@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.lissenok88.restaurant.voting.error.IllegalRequestDataException;
@@ -33,6 +34,7 @@ public class VoteController {
     private final RestaurantRepository restaurantRepository;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Transactional
     public ResponseEntity<Vote> createWithLocation(@RequestParam int restaurantId, @AuthenticationPrincipal AuthUser authUser) {
         log.info("create vote for restaurant {}", restaurantId);
         User user = authUser.getUser();
@@ -47,6 +49,7 @@ public class VoteController {
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Transactional
     public void update(@RequestParam int restaurantId, @AuthenticationPrincipal AuthUser authUser) {
         User user = authUser.getUser();
         Vote vote = voteRepository.getByUserByDate(LocalDate.now(), user).orElseThrow(

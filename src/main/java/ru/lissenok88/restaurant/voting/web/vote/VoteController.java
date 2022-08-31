@@ -17,17 +17,16 @@ import ru.lissenok88.restaurant.voting.web.AuthUser;
 
 import java.net.URI;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+
+import static ru.lissenok88.restaurant.voting.util.TimeUtil.isBeforeTimeLimit;
 
 @RestController
 @RequestMapping(value = VoteController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
 @Slf4j
 public class VoteController {
-    static final String REST_URL = "/api/profile/votes";
 
-    static final LocalTime TIME_LIMIT = LocalTime.of(11, 0);
+    static final String REST_URL = "/api/profile/votes";
 
     private final VoteRepository voteRepository;
 
@@ -49,15 +48,15 @@ public class VoteController {
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@RequestParam int restaurantId, @AuthenticationPrincipal AuthUser authUser) {
-        LocalDateTime localDateTime = LocalDateTime.now();
         User user = authUser.getUser();
-        Vote vote = voteRepository.getByUserByDate(localDateTime.toLocalDate(), user).orElseThrow(
+        Vote vote = voteRepository.getByUserByDate(LocalDate.now(), user).orElseThrow(
                 () -> new IllegalRequestDataException("You haven't voted today")
         );
 
         log.info("update vote {}", vote);
-        if (localDateTime.toLocalTime().compareTo(TIME_LIMIT) < 0) {
-            voteRepository.save(new Vote(vote.id(), restaurantRepository.getById(restaurantId), user, localDateTime.toLocalDate()));
+        if (isBeforeTimeLimit()) {
+            vote.setRestaurant(restaurantRepository.getById(restaurantId));
+            voteRepository.save(vote);
         } else {
             throw new IllegalRequestDataException("You cannot vote again today");
         }

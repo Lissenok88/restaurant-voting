@@ -8,19 +8,20 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.lissenok88.restaurant.voting.model.Vote;
 import ru.lissenok88.restaurant.voting.repository.VoteRepository;
+import ru.lissenok88.restaurant.voting.util.TimeUtil;
 import ru.lissenok88.restaurant.voting.util.JsonUtil;
 import ru.lissenok88.restaurant.voting.web.AbstractControllerTest;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.lissenok88.restaurant.voting.web.restaurant.RestaurantTestData.*;
 import static ru.lissenok88.restaurant.voting.web.user.UserTestData.*;
-import static ru.lissenok88.restaurant.voting.web.vote.VoteController.TIME_LIMIT;
 import static ru.lissenok88.restaurant.voting.web.vote.VoteTestData.*;
 
 class VoteControllerTest extends AbstractControllerTest {
+
     private static final String REST_URL = VoteController.REST_URL + "/";
 
     @Autowired
@@ -45,24 +46,31 @@ class VoteControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = USER_MAIL)
-    void update() throws Exception {
+    void updateBeforeTimeLimit() throws Exception {
         Vote updated = VoteTestData.getUpdated();
-        if (LocalDateTime.now().toLocalTime().compareTo(TIME_LIMIT) < 0) {
-            perform(MockMvcRequestBuilders.put(REST_URL)
-                    .param("restaurantId", String.valueOf(RESTAURANT_2))
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(JsonUtil.writeValue(updated)))
-                    .andDo(print())
-                    .andExpect(status().isNoContent());
+        TimeUtil.setFixedTime(LocalTime.of(10, 30));
+        perform(MockMvcRequestBuilders.put(REST_URL)
+                .param("restaurantId", String.valueOf(RESTAURANT_2))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updated)))
+                .andDo(print())
+                .andExpect(status().isNoContent());
 
-            VOTE_MATCHER.assertMatch(voteRepository.getById(vote1.id()), VoteTestData.getUpdated());
-        } else {
-            perform(MockMvcRequestBuilders.put(REST_URL)
-                    .param("restaurantId", String.valueOf(RESTAURANT_2))
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(JsonUtil.writeValue(updated)))
-                    .andDo(print())
-                    .andExpect(status().isUnprocessableEntity());
-        }
+        VOTE_MATCHER.assertMatch(voteRepository.getById(vote1.id()), VoteTestData.getUpdated());
+        TimeUtil.getDefaultTime();
+    }
+
+    @Test
+    @WithUserDetails(value = USER_MAIL)
+    void updateAfterTimeLimit() throws Exception {
+        Vote updated = VoteTestData.getUpdated();
+        TimeUtil.setFixedTime(LocalTime.of(15, 30));
+        perform(MockMvcRequestBuilders.put(REST_URL)
+                .param("restaurantId", String.valueOf(RESTAURANT_2))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updated)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+        TimeUtil.getDefaultTime();
     }
 }

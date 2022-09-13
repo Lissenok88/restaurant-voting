@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.lissenok88.restaurant.voting.util.RestaurantUtil;
 import ru.lissenok88.restaurant.voting.web.AbstractControllerTest;
 
 import java.util.List;
@@ -16,22 +15,19 @@ import static ru.lissenok88.restaurant.voting.web.menu.MenuTestData.*;
 import static ru.lissenok88.restaurant.voting.web.restaurant.RestaurantController.REST_URL;
 import static ru.lissenok88.restaurant.voting.web.restaurant.RestaurantTestData.*;
 import static ru.lissenok88.restaurant.voting.web.user.UserTestData.*;
-import static ru.lissenok88.restaurant.voting.web.vote.VoteTestData.vote1;
-import static ru.lissenok88.restaurant.voting.web.vote.VoteTestData.vote3;
 
 class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void getAllWithMenuToday() throws Exception {
-        restaurant_1.setMenus(menu1);
-        restaurant_2.setMenus(menu2);
-        restaurant_3.setMenus(menu3);
-        perform(MockMvcRequestBuilders.get(REST_URL + "/with-menus"))
+        restaurant_1.setMenuItems(menu1);
+        restaurant_2.setMenuItems(menu2);
+        restaurant_3.setMenuItems(menu3);
+        perform(MockMvcRequestBuilders.get(REST_URL + "/with-menu-items"))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(RESTAURANT_WITH_MENUS_MATCHER.contentJson(
-                        RestaurantUtil.getTos(List.of(restaurant_1, restaurant_2, restaurant_3), List.of(vote1, vote3))));
+                .andExpect(RESTAURANT_WITH_MENU_ITEMS_MATCHER.contentJson(List.of(restaurant_1, restaurant_2, restaurant_3)));
     }
 }

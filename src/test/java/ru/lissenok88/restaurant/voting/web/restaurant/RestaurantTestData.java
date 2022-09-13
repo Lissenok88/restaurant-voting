@@ -1,12 +1,11 @@
 package ru.lissenok88.restaurant.voting.web.restaurant;
 
 import ru.lissenok88.restaurant.voting.model.Restaurant;
-import ru.lissenok88.restaurant.voting.to.RestaurantTo;
 import ru.lissenok88.restaurant.voting.web.MatcherFactory;
 
 public class RestaurantTestData {
-    public static final MatcherFactory.Matcher<Restaurant> RESTAURANT_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Restaurant.class, "menus");
-    public static final MatcherFactory.Matcher<RestaurantTo> RESTAURANT_WITH_MENUS_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(RestaurantTo.class, "menus.restaurant");
+    public static final MatcherFactory.Matcher<Restaurant> RESTAURANT_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Restaurant.class, "menuItems");
+    public static final MatcherFactory.Matcher<Restaurant> RESTAURANT_WITH_MENU_ITEMS_MATCHER = MatcherFactory.usingEqualsComparator(Restaurant.class);
 
     public static final int RESTAURANT_1 = 1;
     public static final int RESTAURANT_2 = 2;

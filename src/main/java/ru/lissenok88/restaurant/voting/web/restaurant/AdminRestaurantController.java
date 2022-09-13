@@ -1,7 +1,7 @@
 package ru.lissenok88.restaurant.voting.web.restaurant;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -23,6 +23,7 @@ import static ru.lissenok88.restaurant.voting.util.validation.ValidationUtil.che
 
 @RestController
 @RequestMapping(value = AdminRestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequiredArgsConstructor
 @Slf4j
 @CacheConfig(cacheNames = "restaurants")
 public class AdminRestaurantController {
@@ -30,11 +31,6 @@ public class AdminRestaurantController {
     public static final String REST_URL = "/api/admin/restaurants";
 
     private final RestaurantRepository restaurantRepository;
-
-    @Autowired
-    public AdminRestaurantController(RestaurantRepository restaurantRepository) {
-        this.restaurantRepository = restaurantRepository;
-    }
 
     @GetMapping
     @Cacheable

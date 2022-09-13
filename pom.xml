@@ -13,7 +13,7 @@
     <groupId>ru.lissenok88</groupId>
     <artifactId>restaurant-voting</artifactId>
     <version>1.0</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <properties>
         <java.version>17</java.version>

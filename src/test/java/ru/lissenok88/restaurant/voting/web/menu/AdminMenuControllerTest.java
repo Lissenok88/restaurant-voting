@@ -13,6 +13,7 @@ import ru.lissenok88.restaurant.voting.repository.MenuRepository;
 import ru.lissenok88.restaurant.voting.util.JsonUtil;
 import ru.lissenok88.restaurant.voting.web.AbstractControllerTest;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -38,6 +39,31 @@ class AdminMenuControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
+    void getAllByDate() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "/by-date", RESTAURANT_2)
+                .param("localDate", CURRENT_DATE.toString()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MENU_MATCHER.contentJson(menu2));
+    }
+
+    @Test
+    @WithUserDetails(value = ADMIN_MAIL)
+    void delete() throws Exception {
+        perform(MockMvcRequestBuilders.delete(REST_URL + MENU2_ID, RESTAURANT_2))
+                .andExpect(status().isNoContent());
+        assertFalse(menuRepository.get(MENU2_ID, RESTAURANT_2).isPresent());
+    }
+
+    @Test
+    @WithUserDetails(value = ADMIN_MAIL)
+    void deleteDataConflict() throws Exception {
+        perform(MockMvcRequestBuilders.delete(REST_URL + MENU1_ID, RESTAURANT_2))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    @WithUserDetails(value = ADMIN_MAIL)
     void get() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + MENU2_ID, RESTAURANT_2))
                 .andExpect(status().isOk())
@@ -49,7 +75,7 @@ class AdminMenuControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void getNotFound() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + MENU_NOT_FOUND, RESTAURANT_1))
+        perform(MockMvcRequestBuilders.get(REST_URL + MENU_ID_NOT_FOUND, RESTAURANT_1))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -82,6 +108,7 @@ class AdminMenuControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @Transactional(propagation = Propagation.NEVER)
     @WithUserDetails(value = ADMIN_MAIL)
     void createWithLocationDuplicate() {
         Menu duplicate = MenuTestData.getNew();

@@ -17,7 +17,7 @@ public class TimeUtil {
         clock = Clock.fixed((LocalDateTime.of(LocalDate.now(), fixedTime).atZone(TIME_ZONE).toInstant()), TIME_ZONE);
     }
 
-    public static void getDefaultTime() {
+    public static void setDefaultTime() {
         clock = Clock.systemDefaultZone();
     }
 

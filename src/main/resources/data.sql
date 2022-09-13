@@ -14,7 +14,7 @@ VALUES ('Paris-Way'),
        ('Italy-Way'),
        ('Russia-Way');
 
-INSERT INTO MENUS(name, price, restaurant_id, local_date)
+INSERT INTO MENU_ITEMS(name, price, restaurant_id, local_date)
 VALUES ('Салат Цезарь', '75', 1, CURRENT_DATE),
        ('Суп-пюре', '125', 1, CURRENT_DATE),
        ('Картошка по француски', '150', 1, CURRENT_DATE),
@@ -27,6 +27,6 @@ VALUES ('Салат Цезарь', '75', 1, CURRENT_DATE),
        ('Котлета', '50', 3, CURRENT_DATE),
        ('Чай', '30', 3, CURRENT_DATE);
 
-INSERT INTO VOTES(restaurant_id, user_id, date_time)
+INSERT INTO VOTE(restaurant_id, user_id, local_date)
 VALUES (1, 1, CURRENT_DATE),
        (3, 2, CURRENT_DATE);

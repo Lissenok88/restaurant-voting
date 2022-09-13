@@ -16,7 +16,7 @@ public class MenuTestData {
     public static final int MENU1_ID = 1;
     public static final int MENU2_ID = 5;
     public static final int MENU3_ID = 7;
-    public static final int MENU_NOT_FOUND = 20;
+    public static final int MENU_ID_NOT_FOUND = 20;
 
     public static final Menu menu1_1 = new Menu(MENU1_ID, "Салат Цезарь", 75, restaurant_1, CURRENT_DATE);
     public static final Menu menu1_2 = new Menu(MENU1_ID + 1, "Суп-пюре", 125, restaurant_1, CURRENT_DATE);
@@ -39,8 +39,6 @@ public class MenuTestData {
     }
 
     public static Menu getUpdated() {
-        Menu updatedMenu = menu1_1;
-        updatedMenu.setName("Updated dish");
-        return updatedMenu;
+        return new Menu(MENU1_ID, "Update name", 250, restaurant_1, CURRENT_DATE);
     }
 }

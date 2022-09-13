@@ -2,25 +2,23 @@ package ru.lissenok88.restaurant.voting.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "menus", uniqueConstraints = {@UniqueConstraint(
-        columnNames = {"name", "restaurant_id", "local_date"}, name = "menus_unique_name_local_date_idx")})
+@Table(name = "menu_items", uniqueConstraints = {@UniqueConstraint(
+        columnNames = {"restaurant_id", "local_date", "name"}, name = "menu_items_unique_restaurant_id_local_date_name_idx")})
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 public class Menu extends NamedEntity {
     @Column(name = "price", nullable = false)
-    @Range(min = 10, max = 5000)
     private Integer price;
 
-    @Column(name = "local_date", nullable = false, columnDefinition = "timestamp default now()", updatable = false)
+    @Column(name = "local_date", nullable = false, columnDefinition = "date default now()", updatable = false)
     @NotNull
     private LocalDate localDate;
 

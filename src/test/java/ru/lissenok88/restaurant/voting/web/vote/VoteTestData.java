@@ -7,21 +7,21 @@ import java.time.LocalDate;
 
 import static ru.lissenok88.restaurant.voting.web.menu.MenuTestData.CURRENT_DATE;
 import static ru.lissenok88.restaurant.voting.web.restaurant.RestaurantTestData.*;
-import static ru.lissenok88.restaurant.voting.web.user.UserTestData.*;
 
 public class VoteTestData {
     public static final MatcherFactory.Matcher<Vote> VOTE_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Vote.class, "restaurant", "user");
 
-    public static final Vote vote1 = new Vote(1, restaurant_1, user, CURRENT_DATE);
-    public static final Vote vote3 = new Vote(2, restaurant_3, admin, CURRENT_DATE);
+    public static final int VOTE_ID = 1;
+    public static final int VOTE_ID_NOT_FOUND = 30;
+
+    public static final Vote userVote = new Vote(VOTE_ID, restaurant_1, CURRENT_DATE);
+    public static final Vote adminVote = new Vote(VOTE_ID + 1, restaurant_3, CURRENT_DATE);
 
     public static Vote getNew() {
-        return new Vote(null, restaurant_2, bob, LocalDate.now());
+        return new Vote(null, restaurant_2, LocalDate.now());
     }
 
     public static Vote getUpdated() {
-        Vote updatedVote = vote1;
-        updatedVote.setRestaurant(restaurant_2);
-        return updatedVote;
+        return new Vote(VOTE_ID, restaurant_2, CURRENT_DATE);
     }
 }

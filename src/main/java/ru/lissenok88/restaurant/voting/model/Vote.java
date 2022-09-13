@@ -1,5 +1,6 @@
 package ru.lissenok88.restaurant.voting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -9,8 +10,8 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "votes", uniqueConstraints = {@UniqueConstraint(
-        columnNames = {"user_id", "restaurant_id", "date_time"}, name = "vote_unique_user_restaurant_date_time")})
+@Table(name = "vote", uniqueConstraints = {@UniqueConstraint(
+        columnNames = {"user_id", "local_date"}, name = "vote_unique_user_id_local_date")})
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,6 +21,7 @@ public class Vote extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @ToString.Exclude
+    @JsonIgnore
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -28,18 +30,17 @@ public class Vote extends BaseEntity {
     @ToString.Exclude
     private Restaurant restaurant;
 
-    @Column(name = "date_time", nullable = false)
+    @Column(name = "local_date", nullable = false)
     @NotNull
     private LocalDate localDate;
 
-    public Vote(Restaurant restaurant, User user, LocalDate localDate) {
-        this(null, restaurant, user, localDate);
+    public Vote(Restaurant restaurant, LocalDate localDate) {
+        this(null, restaurant, localDate);
     }
 
-    public Vote(Integer id, Restaurant restaurant, User user, LocalDate localDate) {
+    public Vote(Integer id, Restaurant restaurant, LocalDate localDate) {
         super(id);
         this.restaurant = restaurant;
-        this.user = user;
         this.localDate = localDate;
     }
 }

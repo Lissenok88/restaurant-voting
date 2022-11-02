@@ -54,7 +54,7 @@ class VoteControllerTest extends AbstractControllerTest {
     void updateBeforeTimeLimit() throws Exception {
         Vote updated = VoteTestData.getUpdated();
         TimeUtil.setFixedTime(LocalTime.of(10, 30));
-        perform(MockMvcRequestBuilders.put(REST_URL + VOTE_ID)
+        perform(MockMvcRequestBuilders.put(REST_URL)
                 .param("restaurantId", String.valueOf(RESTAURANT_2))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
@@ -70,7 +70,7 @@ class VoteControllerTest extends AbstractControllerTest {
     void updateAfterTimeLimit() throws Exception {
         Vote updated = VoteTestData.getUpdated();
         TimeUtil.setFixedTime(LocalTime.of(15, 30));
-        perform(MockMvcRequestBuilders.put(REST_URL + VOTE_ID)
+        perform(MockMvcRequestBuilders.put(REST_URL)
                 .param("restaurantId", String.valueOf(RESTAURANT_2))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
@@ -82,21 +82,20 @@ class VoteControllerTest extends AbstractControllerTest {
     @Test
     @Transactional(propagation = Propagation.NEVER)
     @WithUserDetails(value = USER_MAIL)
-    void createWithLocationDuplicate() {
+    void createWithLocationDuplicate() throws Exception {
         Vote newVote = new Vote(null, userVote.getRestaurant(), CURRENT_DATE);
-        assertThrows(Exception.class, () ->
-                perform(MockMvcRequestBuilders.post(REST_URL)
-                        .param("restaurantId", String.valueOf(RESTAURANT_1))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(JsonUtil.writeValue(newVote)))
-                        .andDo(print())
-                        .andExpect(status().isUnprocessableEntity()));
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .param("restaurantId", String.valueOf(RESTAURANT_1))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newVote)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
     @WithUserDetails(value = USER_MAIL)
-    void get() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + VOTE_ID))
+    void getByUserToday() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -104,10 +103,12 @@ class VoteControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = USER_MAIL)
-    void getNotFound() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + VOTE_ID_NOT_FOUND))
+    @WithUserDetails(value = ADMIN_MAIL)
+    void getByUserHistoryVotes() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "/history-votes"))
+                .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(status().isNotFound());
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(VOTE_MATCHER.contentJson(adminVote1, adminVote2));
     }
 }

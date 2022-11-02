@@ -29,4 +29,5 @@ VALUES ('Салат Цезарь', '75', 1, CURRENT_DATE),
 
 INSERT INTO VOTE(restaurant_id, user_id, local_date)
 VALUES (1, 1, CURRENT_DATE),
-       (3, 2, CURRENT_DATE);
+       (3, 2, CURRENT_DATE),
+       (3, 2, '2022-06-15');

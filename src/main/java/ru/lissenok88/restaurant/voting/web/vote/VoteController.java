@@ -19,6 +19,7 @@ import ru.lissenok88.restaurant.voting.web.AuthUser;
 
 import java.net.URI;
 import java.time.LocalDate;
+import java.util.List;
 
 import static ru.lissenok88.restaurant.voting.util.TimeUtil.isBeforeTimeLimit;
 import static ru.lissenok88.restaurant.voting.util.validation.ValidationUtil.assureIdConsistent;
@@ -37,10 +38,16 @@ public class VoteController {
 
     private final UserRepository userRepository;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Vote> get(@AuthenticationPrincipal AuthUser authUser, @PathVariable int id) {
-        log.info("get vote {}", id);
-        return ResponseEntity.of(voteRepository.get(id, authUser.id()));
+    @GetMapping()
+    public ResponseEntity<Vote> getByUserToday(@AuthenticationPrincipal AuthUser authUser) {
+        log.info("get votes today");
+        return ResponseEntity.of(voteRepository.getByDate(LocalDate.now(), authUser.id()));
+    }
+
+    @GetMapping("/history-votes")
+    public List<Vote> getByUserHistoryVotes(@AuthenticationPrincipal AuthUser authUser) {
+        log.info("get history votes");
+        return voteRepository.getByUser(authUser.id());
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -48,8 +55,11 @@ public class VoteController {
     public ResponseEntity<Vote> createWithLocation(@RequestParam int restaurantId, @AuthenticationPrincipal AuthUser authUser) {
         log.info("create vote for restaurant {}", restaurantId);
         int userId = authUser.id();
+        if (voteRepository.getByDate(LocalDate.now(), userId).isPresent())
+            throw new IllegalRequestDataException("User " + userId + " already voted today " +
+                    "so the re-vote should be performed instead of new vote creation");
+
         Restaurant restaurant = restaurantRepository.getById(restaurantId);
-        assureIdConsistent(restaurant, restaurantId);
         Vote vote = new Vote(restaurant, LocalDate.now());
         vote.setUser(userRepository.getById(userId));
         Vote created = voteRepository.save(vote);
@@ -61,15 +71,14 @@ public class VoteController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
-    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping()
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
-    public void update(@RequestParam int restaurantId, @AuthenticationPrincipal AuthUser authUser, @PathVariable int id) {
+    public void update(@RequestParam int restaurantId, @AuthenticationPrincipal AuthUser authUser) {
         int userId = authUser.id();
         Vote vote = voteRepository.getByDate(LocalDate.now(), userId).orElseThrow(
                 () -> new IllegalRequestDataException("You haven't voted today")
         );
-        assureIdConsistent(vote, id);
 
         log.info("update vote {}", vote);
         if (isBeforeTimeLimit()) {
@@ -78,7 +87,8 @@ public class VoteController {
             vote.setRestaurant(restaurant);
             voteRepository.save(vote);
         } else {
-            throw new IllegalRequestDataException("You cannot vote again today");
+            throw new IllegalRequestDataException("User " + userId + " already voted today" +
+                    " so due it's already after past 11am, the re-vote cannot be performed");
         }
     }
 }

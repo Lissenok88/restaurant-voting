@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +24,7 @@ import static ru.lissenok88.restaurant.voting.util.validation.ValidationUtil.che
 @RequestMapping(value = AdminRestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 @Slf4j
-@CacheConfig(cacheNames = "restaurants")
+@CacheConfig(cacheNames = "restaurantsWithMenuItems")
 public class AdminRestaurantController {
 
     public static final String REST_URL = "/api/admin/restaurants";
@@ -33,7 +32,6 @@ public class AdminRestaurantController {
     private final RestaurantRepository restaurantRepository;
 
     @GetMapping
-    @Cacheable
     public List<Restaurant> getAll() {
         log.info("getAll restaurants");
         return restaurantRepository.findAll();
